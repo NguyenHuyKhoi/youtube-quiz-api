@@ -1,17 +1,36 @@
 import { IVideo, Video } from "@model";
+import { VideoListRequest } from "@request";
+import { format_page, format_per_page, paginate } from "@util";
 import { youtube_v3 } from "googleapis";
 import { Service } from "typedi";
 
 @Service()
 export class VideoService {
-  async index() {
-    return true;
+  async index(request: VideoListRequest) {
+    const page = format_page(request.page);
+    const per_page = format_per_page(request.per_page);
+
+    let query: any = {};
+    const {} = request;
+
+    var data = await Video.find(query)
+      .sort({ "statistics.view_count": -1 })
+      .limit(per_page)
+      .skip((page - 1) * per_page)
+      .lean();
+    const total = await Video.countDocuments(query);
+
+    data = data.map((u) => ({
+      ...u,
+      thumbnail: u.thumbnails.medium ?? u.thumbnails.default ?? u.thumbnails.high,
+    }));
+
+    return paginate(data, total, per_page, page);
   }
 
   convertData(video: youtube_v3.Schema$Video): Partial<IVideo> {
     const { id, snippet, statistics, contentDetails } = video;
-    const { title, description, channelId, thumbnails, publishedAt, tags } =
-      snippet;
+    const { title, description, channelId, thumbnails, publishedAt, tags } = snippet;
     const { duration } = contentDetails;
     const { viewCount, likeCount, commentCount, favoriteCount } = statistics;
     return {

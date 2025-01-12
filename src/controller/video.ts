@@ -1,39 +1,16 @@
-import {
-  Body,
-  BodyParam,
-  Get,
-  JsonController,
-  Param,
-  Patch,
-  Post,
-} from "routing-controllers";
-import { Service } from "typedi";
+import { VideoListRequest } from "@request";
+import { VideoService } from "@service";
 import { success } from "@util";
-import { ChannelService } from "@service";
-import { ChannelCreateRequest } from "@request";
+import { Get, JsonController, QueryParams } from "routing-controllers";
+import { Service } from "typedi";
 
 @Service()
 @JsonController("/videos")
 export class VideoController {
-  constructor(private service: ChannelService) {}
+  constructor(private service: VideoService) {}
 
   @Get("")
-  async index() {
-    return success(await this.service.index());
-  }
-
-  @Get("/:id")
-  async show(@Param("id") id: string) {
-    return success(await this.service.show(id));
-  }
-
-  @Post("")
-  async create(@Body() request: ChannelCreateRequest) {
-    return success(await this.service.create(request));
-  }
-
-  @Patch("/:id")
-  async update(@Param("id") id: string) {
-    return success(await this.service.update(id));
+  async index(@QueryParams() request: VideoListRequest) {
+    return success(await this.service.index(request));
   }
 }

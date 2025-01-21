@@ -13,7 +13,7 @@ function base_response(success: boolean, code: Number, data: any = null, message
     success,
     status: code,
     message,
-    data,
+    data: transform_data(data),
   };
 }
 

@@ -1,5 +1,5 @@
 import { IVideo, Video } from "@model";
-import { VideoListRequest } from "@request";
+import { VideoListRequest, VideoUpdateRequest } from "@request";
 import { format_page, format_per_page, paginate } from "@util";
 import { youtube_v3 } from "googleapis";
 import { Service } from "typedi";
@@ -11,8 +11,12 @@ export class VideoService {
     const per_page = format_per_page(request.per_page);
 
     let query: any = {};
-    const {} = request;
-
+    const { has_answers } = request;
+    if (has_answers) {
+      query.quiz_count = { $gt: 0 };
+    } else if (has_answers === false) {
+      query.quiz_count = null;
+    }
     var data = await Video.find(query)
       .sort({ "statistics.view_count": -1 })
       .limit(per_page)
@@ -74,5 +78,14 @@ export class VideoService {
       },
       { upsert: true }
     );
+  }
+
+  async show(id: string) {
+    var data = await Video.findById(id).lean();
+    return data;
+  }
+
+  async update(id: string, request: VideoUpdateRequest) {
+    await Video.findByIdAndUpdate(id, { $set: request });
   }
 }

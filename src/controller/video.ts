@@ -1,7 +1,7 @@
-import { VideoListRequest } from "@request";
+import { VideoListRequest, VideoUpdateRequest } from "@request";
 import { VideoService } from "@service";
 import { success } from "@util";
-import { Get, JsonController, QueryParams } from "routing-controllers";
+import { Body, Get, JsonController, Param, Patch, QueryParams } from "routing-controllers";
 import { Service } from "typedi";
 
 @Service()
@@ -12,5 +12,15 @@ export class VideoController {
   @Get("")
   async index(@QueryParams() request: VideoListRequest) {
     return success(await this.service.index(request));
+  }
+
+  @Get("/:id")
+  async show(@Param("id") id: string) {
+    return success(await this.service.show(id));
+  }
+
+  @Patch("/:id")
+  async update(@Param("id") id: string, @Body() request: VideoUpdateRequest) {
+    return success(await this.service.update(id, request));
   }
 }

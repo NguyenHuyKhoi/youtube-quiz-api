@@ -7,6 +7,10 @@ export interface IVideoStatistics {
   favorite_count: number;
   comment_count: number;
 }
+
+export interface IQuiz {
+  answer: number;
+}
 export interface IVideo extends Document {
   title: string;
   description: string;
@@ -19,6 +23,12 @@ export interface IVideo extends Document {
   deleted_at: null;
   thumbnails: youtube_v3.Schema$ThumbnailDetails;
   statistics: IVideoStatistics;
+  video_end_time: number;
+  video_begin_time: number;
+  quiz_count: number;
+  quiz_explanation_time: number;
+  quiz_time: number;
+  quizzes: IQuiz[];
 }
 
 const VideoSchema = new Schema<IVideo>(
@@ -58,6 +68,27 @@ const VideoSchema = new Schema<IVideo>(
       type: String,
       unique: true,
     },
+    video_begin_time: {
+      type: Number,
+    },
+    video_end_time: {
+      type: Number,
+    },
+    quiz_count: {
+      type: Number,
+    },
+    quiz_explanation_time: {
+      type: Number,
+    },
+    quiz_time: {
+      type: Number,
+    },
+    quizzes: [
+      {
+        type: Object,
+        default: [],
+      },
+    ],
     deleted_at: {
       type: Date,
       default: null,

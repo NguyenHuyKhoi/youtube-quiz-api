@@ -3,10 +3,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import http from "http";
 import mongoose from "mongoose";
-import {
-  useContainer as routingControllersUseContainer,
-  useExpressServer,
-} from "routing-controllers";
+import { useContainer as routingControllersUseContainer, useExpressServer } from "routing-controllers";
 import { Container } from "typedi";
 import { appConfig } from "./config/app";
 import { CustomErrorHandler } from "./middleware/CustomErrorHandler";
@@ -44,11 +41,10 @@ export class App {
     this.app.use(new CustomErrorHandler().error);
   }
   private startApi() {
-    this.httpServer.listen(this.port, () =>
-      console.log(
-        `🚀 Server Storage API started at http://localhost:${this.port}\n🚨️ Environment: ${process.env.NODE_ENV}`
-      )
-    );
+    this.httpServer.listen(this.port, () => {
+      console.log("PROCESS env: ", JSON.stringify(process.env, null, 2));
+      console.log(`🚀 Server Storage API started at http://localhost:${this.port}\n🚨️ Environment: ${process.env.NODE_ENV}`);
+    });
   }
 
   private registerRoutingControllers() {

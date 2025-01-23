@@ -5,11 +5,12 @@ WORKDIR /app
 COPY . .
 
 RUN npm install
-RUN npm install -g concurrently
 
 # Development
 # CMD ["npm", "run", "dev"]
 
 # Production
-RUN npm install -g pm2
-CMD ["pm2-runtime", "ecosystem.config.js", "--env", "production"]
+RUN npm run build
+
+ENV NODE_ENV=production
+CMD ["node", "./dist/main.js"]

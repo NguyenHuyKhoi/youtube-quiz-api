@@ -9,5 +9,6 @@ logs
 /src/public/excel/
 /package-lock.json
 /src/public/uploads
-
+yarn.lock
+package-lock.json
 .docker

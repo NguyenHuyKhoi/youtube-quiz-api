@@ -1,4 +1,5 @@
-import { IVideo, Video } from "@model";
+import { ILoggedUser } from "@middleware";
+import { IVideo, Result, Video } from "@model";
 import { VideoListRequest, VideoUpdateRequest } from "@request";
 import { format_page, format_per_page, paginate } from "@util";
 import { youtube_v3 } from "googleapis";
@@ -6,7 +7,7 @@ import { Service } from "typedi";
 
 @Service()
 export class VideoService {
-  async index(request: VideoListRequest) {
+  async index(request: VideoListRequest, user: ILoggedUser) {
     const page = format_page(request.page);
     const per_page = format_per_page(request.per_page);
 
@@ -29,7 +30,18 @@ export class VideoService {
       thumbnail: u.thumbnails.medium ?? u.thumbnails.default ?? u.thumbnails.high,
     }));
 
+    data = await this.appendResults(data, user);
     return paginate(data, total, per_page, page);
+  }
+
+  async appendResults(data: any[], user: ILoggedUser) {
+    const video_ids = data.map(({ _id }) => _id);
+    const results = await Result.find({ video: { $in: video_ids }, user: user._id }).lean();
+    data = data.map((u: any) => ({
+      ...u,
+      best_score: results.find((result: any) => result.video?._id?.toString() === u?._id?.toString())?.best_result,
+    }));
+    return data;
   }
 
   convertData(video: youtube_v3.Schema$Video): Partial<IVideo> {

@@ -2,7 +2,6 @@ import { connectMongoose, registerMongooseModels } from "@util";
 import bodyParser from "body-parser";
 import express from "express";
 import http from "http";
-import mongoose from "mongoose";
 import { useContainer as routingControllersUseContainer, useExpressServer } from "routing-controllers";
 import { Container } from "typedi";
 import { appConfig } from "./config/app";
@@ -69,7 +68,7 @@ export class App {
         });
         return routes;
       };
-      console.log(listRoutes(this.app));
+      // console.log(listRoutes(this.app));
     });
   }
 

@@ -2,7 +2,7 @@ version: "3.4"
 
 services:
   app:
-    image: youtube-quiz-api-prod:v1
+    image: registry.gitlab.com/huykhoiqc/youtube-quiz-api
     volumes:
       - ./:/app
     environment:
@@ -14,12 +14,4 @@ services:
       - PORT=${PORT}
     ports:
       - "${PORT}:${PORT}"
-    restart: unless-stopped
-    depends_on:
-      - db
-
-  db:
-    image: mongo:4.4
-    volumes:
-      - .docker/data/db:/data/db
     restart: unless-stopped

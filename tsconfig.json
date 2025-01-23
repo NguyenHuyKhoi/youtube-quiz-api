@@ -17,6 +17,7 @@
       "@util": ["src/util/index.ts"],
       "@config": ["src/config/index.ts"],
       "@controller": ["src/api/controller/index.ts"],
+      "@middleware": ["src/middleware/index.ts"],
       "@request": ["src/request/index.ts"],
       "@model": ["src/model/index.ts"],
       "@service": ["src/service/index.ts"],

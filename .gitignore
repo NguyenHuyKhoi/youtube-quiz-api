@@ -9,3 +9,5 @@ logs
 /src/public/excel/
 /package-lock.json
 /src/public/uploads
+
+.docker

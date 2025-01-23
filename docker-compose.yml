@@ -1,0 +1,25 @@
+version: "3.4"
+
+services:
+  app:
+    image: youtube-quiz-api-prod:v1
+    volumes:
+      - ./:/app
+    environment:
+      - ROUTE_PREFIX=${ROUTE_PREFIX}
+      - YOUTUBE_API_KEY=${YOUTUBE_API_KEY}
+      - MONGOOSE_PATH=${MONGOOSE_PATH}
+      - CONTROLLER_DIR=${CONTROLLER_DIR}
+      - MIDDLEWARE_DIR=${MIDDLEWARE_DIR}
+      - PORT=${PORT}
+    ports:
+      - "${PORT}:${PORT}"
+    restart: unless-stopped
+    depends_on:
+      - db
+
+  db:
+    image: mongo:4.4
+    volumes:
+      - .docker/data/db:/data/db
+    restart: unless-stopped

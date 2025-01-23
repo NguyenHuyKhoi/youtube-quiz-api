@@ -42,7 +42,6 @@ export class App {
   }
   private startApi() {
     this.httpServer.listen(this.port, () => {
-      console.log("PROCESS env: ", JSON.stringify(process.env, null, 2));
       console.log(`🚀 Server Storage API started at http://localhost:${this.port}\n🚨️ Environment: ${process.env.NODE_ENV}`);
     });
   }

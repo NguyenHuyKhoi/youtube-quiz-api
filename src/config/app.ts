@@ -1,7 +1,7 @@
 import { env } from "../util/env";
 
 export const appConfig = {
-  port: Number(env("PORT")),
+  port: Number(env("PORT", "3000")),
   route_prefix: env("ROUTE_PREFIX"),
 
   controller_dir: env("CONTROLLER_DIR"),

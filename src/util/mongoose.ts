@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 
 export async function connectMongoose() {
   try {
-    mongoose.set("strictQuery", true);
-    console.log("Appconfig:", appConfig);
+    console.log("Connection path: ", appConfig.mongoose_path);
     await mongoose.connect(appConfig.mongoose_path);
     console.log("Connect to mongoose is successful!");
   } catch (error) {

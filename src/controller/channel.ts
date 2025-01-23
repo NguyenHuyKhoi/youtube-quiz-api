@@ -1,17 +1,8 @@
-import {
-  Body,
-  BodyParam,
-  Get,
-  JsonController,
-  Param,
-  Patch,
-  Post,
-  QueryParam,
-} from "routing-controllers";
+import { Body, BodyParam, Get, JsonController, Param, Patch, Post, QueryParam, QueryParams } from "routing-controllers";
 import { Service } from "typedi";
 import { success } from "@util";
 import { ChannelService } from "@service";
-import { ChannelCreateRequest } from "@request";
+import { ChannelCreateRequest, ChannelListRequest } from "@request";
 
 @Service()
 @JsonController("/channels")
@@ -19,8 +10,8 @@ export class ChannelController {
   constructor(private service: ChannelService) {}
 
   @Get("")
-  async index() {
-    return success(await this.service.index());
+  async index(@QueryParams() request: ChannelListRequest) {
+    return success(await this.service.index(request));
   }
 
   @Get("/:id")
@@ -39,10 +30,7 @@ export class ChannelController {
   }
 
   @Patch("/:id/sync-youtube-videos")
-  async syncYoutubeVideos(
-    @Param("id") id: string,
-    @QueryParam("all") all: boolean
-  ) {
+  async syncYoutubeVideos(@Param("id") id: string, @QueryParam("all") all: boolean) {
     return success(await this.service.syncYoutubeVideos(id, all));
   }
 }

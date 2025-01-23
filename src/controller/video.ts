@@ -5,7 +5,7 @@ import { Body, Get, JsonController, Param, Patch, QueryParams } from "routing-co
 import { Service } from "typedi";
 
 @Service()
-@JsonController("/vid3eos")
+@JsonController("/videos")
 export class VideoController {
   constructor(private service: VideoService) {}
 

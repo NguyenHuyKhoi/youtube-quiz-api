@@ -2,20 +2,27 @@ import { Service } from "typedi";
 import { Channel, IChannel } from "@model";
 import { youtube } from "@config";
 import { youtube_v3 } from "googleapis";
-import { ChannelCreateRequest } from "@request";
+import { ChannelCreateRequest, ChannelListRequest } from "@request";
 import { BadRequestError } from "routing-controllers";
-import { MsgError } from "@util";
+import { format_page, format_per_page, MsgError, paginate } from "@util";
 import { YoutubeUtil } from "./youtube";
 import { VideoService } from "./video";
 
 @Service()
 export class ChannelService {
-  constructor(
-    private youtubeUtil: YoutubeUtil,
-    private videoService: VideoService
-  ) {}
-  async index() {
-    return true;
+  constructor(private youtubeUtil: YoutubeUtil, private videoService: VideoService) {}
+  async index(request: ChannelListRequest) {
+    const page = format_page(request.page);
+    const per_page = format_per_page(request.per_page);
+
+    let query: any = {};
+    var data = await Channel.find(query)
+      .limit(per_page)
+      .skip((page - 1) * per_page)
+      .lean();
+    const total = await Channel.countDocuments(query);
+
+    return paginate(data, total, per_page, page);
   }
 
   async update(id: string) {
@@ -38,9 +45,7 @@ export class ChannelService {
       title: snippet?.title,
       description: snippet?.description,
       custom_url: snippet?.customUrl,
-      published_at: snippet?.publishedAt
-        ? new Date(snippet?.publishedAt)
-        : null,
+      published_at: snippet?.publishedAt ? new Date(snippet?.publishedAt) : null,
       thumbnails: snippet?.thumbnails,
       statistics: {
         view_count: Number(statistics.viewCount),
@@ -80,12 +85,7 @@ export class ChannelService {
     const yt_videos = await this.youtubeUtil.getChannelVideos(data.youtube_id, {
       published_after: all ? undefined : data.sync_youtube_at,
     });
-    await Promise.allSettled(
-      yt_videos.map(
-        async (yt_video) =>
-          await this.videoService.upsert(yt_video, data._id?.toString())
-      )
-    );
+    await Promise.allSettled(yt_videos.map(async (yt_video) => await this.videoService.upsert(yt_video, data._id?.toString())));
     await Channel.findByIdAndUpdate(id, {
       $set: { sync_youtube_at: new Date() },
     });

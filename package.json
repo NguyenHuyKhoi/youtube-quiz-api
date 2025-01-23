@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development ./node_modules/.bin/nodemon --exec './node_modules/.bin/ts-node' src/main.ts",
     "build": "tsc",
+    "start": "npm run build && concurrently \" NODE_ENV=production node ./dist/main.js\" \"sleep 60\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -24,6 +25,7 @@
     "module-alias": "^2.2.3",
     "mongoose": "^8.9.3",
     "npm": "^11.0.0",
+    "reflect-metadata": "^0.2.2",
     "routing-controllers": "^0.10.4",
     "ts-node": "^10.9.2",
     "typedi": "^0.10.0"

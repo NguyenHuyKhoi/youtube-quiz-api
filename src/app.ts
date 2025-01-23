@@ -15,6 +15,7 @@ export class App {
   public httpServer: http.Server;
 
   public async bootstrap() {
+    console.log("Init bootstrap app");
     await connectMongoose();
     registerMongooseModels();
 
@@ -41,6 +42,7 @@ export class App {
     this.app.use(new CustomErrorHandler().error);
   }
   private startApi() {
+    console.log("Start api: ", this.port);
     this.httpServer.listen(this.port, () => {
       console.log(`🚀 Server Storage API started at http://localhost:${this.port}\n🚨️ Environment: ${process.env.NODE_ENV}`);
     });

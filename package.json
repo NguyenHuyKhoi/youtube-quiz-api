@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development ./node_modules/.bin/nodemon --exec './node_modules/.bin/ts-node' src/main.ts",
     "build": "tsc",
+    "prod": "cross-env NODE_ENV=production node ./dist/main.js",
     "start": "npm run build && concurrently \" NODE_ENV=production node ./dist/main.js\" \"sleep 60\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

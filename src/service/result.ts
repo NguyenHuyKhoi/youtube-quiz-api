@@ -1,12 +1,21 @@
 import { ILoggedUser } from "@middleware";
-import { Result } from "@model";
+import { Result, Video } from "@model";
 import { ResultCreateRequest } from "@request";
+import { MsgError } from "@util";
+import { BadRequestError } from "routing-controllers";
 import { Service } from "typedi";
 
 @Service()
 export class ResultService {
   async create(request: ResultCreateRequest, user: ILoggedUser) {
     const { score, video } = request;
+    var video_data: any = await Video.findById(video).lean();
+    if (!video_data || video_data.deleted_at) {
+      throw new BadRequestError(MsgError.VIDEO_NOT_FOUND);
+    }
+    if (!video_data.quiz_count) {
+      throw new BadRequestError(MsgError.VIDEO_NOT_CONFIG_TO_PLAY);
+    }
     var data = await Result.findOne({ video, user: user._id }).lean();
     if (!data) {
       await Result.create({

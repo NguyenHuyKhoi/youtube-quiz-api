@@ -9,6 +9,9 @@ export interface IVideoStatistics {
 }
 
 export interface IQuiz {
+  index: number;
+  answers: string[];
+  question: string;
   answer: number;
 }
 export interface IVideo extends Document {
@@ -29,6 +32,7 @@ export interface IVideo extends Document {
   quiz_explanation_time: number;
   quiz_time: number;
   quizzes: IQuiz[];
+  quiz_extracted: boolean;
 }
 
 const VideoSchema = new Schema<IVideo>(
@@ -39,6 +43,7 @@ const VideoSchema = new Schema<IVideo>(
     description: {
       type: String,
     },
+    quiz_extracted: { type: Boolean, default: false },
     channel: {
       type: Schema.Types.ObjectId,
       ref: "Channel",

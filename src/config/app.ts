@@ -10,4 +10,8 @@ export const appConfig = {
   mongoose_path: env("MONGOOSE_PATH"),
 
   youtube_api_key: env("YOUTUBE_API_KEY"),
+
+  openai_key: env("OPENAI_KEY"),
+  gemini_key: env("GEMINI_KEY"),
+  public_url: env("PUBLIC_URL"),
 };

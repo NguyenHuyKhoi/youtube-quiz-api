@@ -14,6 +14,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@distube/ytdl-core": "^4.15.8",
+    "@google/generative-ai": "^0.21.0",
     "@googleapis/youtube": "^20.0.0",
     "axios": "^1.7.9",
     "class-transformer": "^0.5.1",
@@ -29,11 +31,16 @@
     "npm": "^11.0.0",
     "reflect-metadata": "^0.2.2",
     "routing-controllers": "^0.10.4",
+    "tesseract.js": "^6.0.0",
     "ts-node": "^10.9.2",
-    "typedi": "^0.10.0"
+    "typedi": "^0.10.0",
+    "youtube-dl-exec": "^3.0.13",
+    "youtube-screenshot": "^1.0.2",
+    "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "@types/fluent-ffmpeg": "^2.1.27",
     "@types/module-alias": "^2.0.4",
     "@types/node": "^22.10.5",
     "nodemon": "^3.1.9",

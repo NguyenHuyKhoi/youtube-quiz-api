@@ -12,3 +12,5 @@ logs
 yarn.lock
 package-lock.json
 .docker
+
+/public

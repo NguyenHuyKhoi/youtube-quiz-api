@@ -6,7 +6,7 @@ import { useContainer as routingControllersUseContainer, useExpressServer } from
 import { Container } from "typedi";
 import { appConfig } from "./config/app";
 import { CustomErrorHandler } from "./middleware/CustomErrorHandler";
-
+import path from "path";
 export class App {
   private app: express.Application = express();
   private port: Number = appConfig.port;
@@ -21,8 +21,8 @@ export class App {
     this.useContainers();
 
     this.httpServer = new http.Server(this.app);
+    this.serveStaticFiles();
     this.startApi();
-
     this.setupPreControllerMiddlewares();
     this.registerRoutingControllers();
     this.setupPostControllerMiddlewares();
@@ -40,6 +40,11 @@ export class App {
   private setupPostControllerMiddlewares() {
     this.app.use(new CustomErrorHandler().error);
   }
+
+  private serveStaticFiles() {
+    this.app.use("/public", express.static(path.join("public"), { maxAge: 31557600000 }));
+  }
+
   private startApi() {
     console.log("Start api with configs: ", JSON.stringify(appConfig, null, 2));
     this.httpServer.listen(this.port, () => {

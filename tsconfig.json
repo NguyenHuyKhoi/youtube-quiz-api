@@ -15,6 +15,7 @@
     "baseUrl": ".",
     "paths": {
       "@util": ["src/util/index.ts"],
+      "@helper": ["src/helper/index.ts"],
       "@config": ["src/config/index.ts"],
       "@controller": ["src/api/controller/index.ts"],
       "@middleware": ["src/middleware/index.ts"],

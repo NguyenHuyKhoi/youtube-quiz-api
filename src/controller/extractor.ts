@@ -11,12 +11,12 @@ import { Service } from "typedi";
 export class ExtractController {
   constructor(private service: ExtractorQuizService) {}
 
-  @Get("/quiz")
+  @Get("")
   async extractQuiz(@Body() request: ExtractQuizRequest) {
     return success(await this.service.extractVideo(request));
   }
 
-  @Get("/quiz/all")
+  @Get("/all")
   async extractQuizAll() {
     return success(await this.service.extractVideoAll());
   }

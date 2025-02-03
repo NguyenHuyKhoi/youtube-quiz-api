@@ -40,8 +40,8 @@ export class GeminiService {
       const quizzes = JSON.parse(result_text.replace("```json", "").replace("```", ""));
       return quizzes;
     } catch (e) {
-      console.log("error: ", e);
-      return [];
+      console.log("error: gemini");
+      return null;
     }
   }
 

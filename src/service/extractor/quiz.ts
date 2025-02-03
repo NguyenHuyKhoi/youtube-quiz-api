@@ -1,7 +1,7 @@
 import { appConfig } from "@config";
-import { GeminiService, OCRService, OpenAIService } from "@helper";
-import { IQuiz, Video } from "@model";
-import { ExtractQuizRequest, ExtractTimeRequest } from "@request";
+import { GeminiService } from "@helper";
+import { Video } from "@model";
+import { ExtractQuizRequest } from "@request";
 import { MsgError } from "@util";
 import fs from "fs";
 import { BadRequestError } from "routing-controllers";
@@ -92,9 +92,11 @@ export class ExtractorQuizService {
       const image_paths = files.map((u) => `${appConfig.public_url}/${this.screenshot_folder}/${u}`);
 
       var quizzes = await this.geminiService.extractQuizzes(image_paths);
-      if (quizzes.length > 0) {
+      if (quizzes != null) {
         console.log(`Video has ${quizzes.length}  quizzes`);
         video = await Video.findByIdAndUpdate(request.video, { $set: { quizzes, quiz_extracted: true } }, { new: true }).lean();
+      } else {
+        // Gemini api error, try later
       }
       console.timeEnd("EXTRACT_QUIZZES");
     } catch (e) {
@@ -110,10 +112,10 @@ export class ExtractorQuizService {
     });
   }
   async extractVideoAll() {
-    const videos: any[] = await Video.find({ quiz_extracted: { $ne: true }, deleted_at: null }).lean();
+    const videos: any[] = await Video.find({ quiz_extracted: { $ne: true }, deleted_at: null }, {}, { sort: { created_at: -1 } }).lean();
     console.log("Video count: ", videos.length);
     for (var i = 0; i < videos.length; i++) {
-      console.log(`\n\n\n******************Process for video ${i}: ${videos[i].title}*********************`);
+      console.log(`\n\n\n******************Process for video ${i}: ${videos[i].youtube_id} --- ${videos[i].title}*********************`);
       console.time(`VIDEO_${i}`);
       await this.extractVideo({ video: videos[i]._id?.toString() });
       console.timeEnd(`VIDEO_${i}`);

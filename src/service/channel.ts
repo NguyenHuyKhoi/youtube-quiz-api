@@ -17,6 +17,7 @@ export class ChannelService {
 
     let query: any = {};
     var data = await Channel.find(query)
+      .sort({ created_at: -1 })
       .limit(per_page)
       .skip((page - 1) * per_page)
       .lean();
